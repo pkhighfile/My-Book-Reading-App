@@ -29,12 +29,14 @@ for you to use with your app.
 |-- package.json - npm package manager file. It's unlikely that you'll need to modify this.
 ```
 
-R 
+
 ## How to Run this app in your local
 
 To run this app, you simply have to download or clone this repo in your local, extract it and then install node.js in local, use node js cmd and locate it after that simply use following commands
+```
 |-- npm install -- this line install all required packages to run this app successfully
 |-- npm start  -- this line start the npm webapp for you and open your web browser with localhost:3000 
+```
 
 ## Backend Server
 
