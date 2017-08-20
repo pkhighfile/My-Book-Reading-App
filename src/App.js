@@ -6,12 +6,18 @@ import ListBooks from './ListBooks'
 import CreateSearch from './CreateSearch'
 
 class BooksApp extends React.Component {
-  state = {
+    constructor() {
+    super();
+   this.state  = {
     books: [],
-    sbooks:[]
+    sbooks: []
   }
-
-  componentDidMount() {
+}
+  componentWillMount() {
+   this.FetchBooks()
+  }
+  
+  FetchBooks = () =>{
     BooksAPI
       .getAll()
       .then((books) => {
@@ -28,17 +34,22 @@ class BooksApp extends React.Component {
             .books
             .concat([book])
         }))
-      }).then(() =>
-        this.props.history.push('/')
-      )
+      }).then(()=>{
+        this.FetchBooks()
+      })
   }
 
   BookSearch = (query, maxResult) => {
+    if(query !== ''){
     BooksAPI
       .search(query, maxResult)
       .then((sbooks) => {
-        this.setState({sbooks})
+        if(sbooks !== 'undefined')
+          {
+           this.setState({sbooks})
+          }     
       })
+  }
   }
 
   render() {
@@ -47,18 +58,13 @@ class BooksApp extends React.Component {
         <Route
           exact
           path='/'
-          render={() => (
-          <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
-            </div>
-            <ListBooks books={this.state.books} onBookUpdate={this.UpdateShelf}/>
-          </div>
+          render={() => (         
+            <ListBooks books={this.state.books} onBookUpdate={this.UpdateShelf}/>         
         )}/>
         <Route
           path='/search'
           render={() => (<CreateSearch
-          books={this.state.sbooks}
+          sbooks={this.state.sbooks}
           onBookUpdate={this.UpdateShelf}
           onSearch={this.BookSearch}/>)}
          />

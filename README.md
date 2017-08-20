@@ -1,4 +1,20 @@
-This is My-Book-Reading-App. 
+## Welcome to MyReads App and usage instructions 
+
+This is My-Book-Reading-App. Where you able to track your book status. There are 3 section. 
+1. CurrentReading :  In this section you able to add / bookmark those books that you're reading now.
+2. Want-To-Read : In this section you able to add/bookmark those books that you want to read at later stage. 
+3. Read : In this section you able to add/bookmark those books that you already read. 
+> There is a add button that redirect to you search page where you can search for book and you can move these book to 
+in sections/bookmark.
+
+## Installation
+
+To run this app in your local machine, you need to download or clone this repo in your local, if you download then you have to extract it from the zip and then you have to install node.js in local machine. After navigate to program from the start menu and find the node js command line interface and run it after that you have to locate your working dir by using following commands
+```
+|-- cd "path" -- at the place of path variable, you have to pass floder path where you extracted the zip file.
+|-- npm install -- this line install all required packages to run this app successfully
+|-- npm start  -- this line start the npm webapp for you and open your web browser with localhost:3000
+```
 
 ## What You're Getting
 ```
@@ -28,17 +44,9 @@ TL;DR - Fork and clone your own version of this to use it.
 for you to use with your app.
 |-- package.json - npm package manager file. It's unlikely that you'll need to modify this.
 ```
+ 
 
-
-## How to Run this app in your local
-
-To run this app, you simply have to download or clone this repo in your local, extract it and then install node.js in local, use node js cmd and locate it after that simply use following commands
-```
-|-- npm install -- this line install all required packages to run this app successfully
-|-- npm start  -- this line start the npm webapp for you and open your web browser with localhost:3000 
-```
-
-## Backend Server
+## Backend Server details for developers
 
 To simplify your development process, we've provided a backend server for you to develop against. The provided file [`BooksAPI.js`](src/BooksAPI.js) contains the methods you will need to perform necessary operations on the backend:
 
