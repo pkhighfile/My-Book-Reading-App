@@ -4,8 +4,7 @@ This is My-Book-Reading-App. Where you able to track your book status. There are
 1. CurrentReading :  In this section you able to add / bookmark those books that you're reading now.
 2. Want-To-Read : In this section you able to add/bookmark those books that you want to read at later stage. 
 3. Read : In this section you able to add/bookmark those books that you already read. 
-> There is a add button that redirect to you search page where you can search for book and you can move these book to 
-in sections/bookmark.
+> There is a add button that redirect you to search page where you can perform search for book and you can move these book to in sections/bookmark.
 
 ## Installation
 
