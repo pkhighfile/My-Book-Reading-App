@@ -9,8 +9,7 @@ class BooksApp extends React.Component {
     constructor() {
     super();
    this.state  = {
-    books: [],
-    sbooks: []
+    books: []    
   }
 }
   componentWillMount() {
@@ -28,29 +27,11 @@ class BooksApp extends React.Component {
   UpdateShelf = (book, shelf) => {
     BooksAPI
       .update(book, shelf)
-      .then(book => {
-        this.setState(state => ({
-          books: state
-            .books
-            .concat([book])
-        }))
-      }).then(()=>{
+      .then(()=>{
         this.FetchBooks()
+        console.log(this.state)
       })
-  }
-
-  BookSearch = (query, maxResult) => {
-    if(query !== ''){
-    BooksAPI
-      .search(query, maxResult)
-      .then((sbooks) => {
-        if(sbooks !== 'undefined')
-          {
-           this.setState({sbooks})
-          }     
-      })
-  }
-  }
+  } 
 
   render() {
     return (
@@ -63,10 +44,9 @@ class BooksApp extends React.Component {
         )}/>
         <Route
           path='/search'
-          render={() => (<CreateSearch
-          sbooks={this.state.sbooks}
-          onBookUpdate={this.UpdateShelf}
-          onSearch={this.BookSearch}/>)}
+          render={() => (<CreateSearch 
+          fetch={this.FetchBooks}
+          books={this.state.books}/>)}
          />
       </div>
     )

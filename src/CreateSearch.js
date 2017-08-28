@@ -1,82 +1,101 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom'
-import PropTypes from 'prop-types'
-/*import escapeRegExp from 'escape-string-regexp'*/
+import {Link} from 'react-router-dom';
+import PropTypes from 'prop-types';
+import * as BooksAPI from './BooksAPI';
+import SingleBook from './SingleBook';
 
 class CreateSearch extends Component {
-    static propTypes = {       
-        onBookUpdate: PropTypes.func.isRequired,
-        onSearch: PropTypes.func.isRequired
+    constructor() {
+        super();
+        this.state = {
+            sbooks: [],
+            query: ''
+        }
     }
 
-    render() {
-        const {sbooks, onBookUpdate, onSearch} = this.props
-       
-        return (
-            <div>
-                <div className="search-books">
-                    <div className="search-books-bar">
-                        <Link className="close-search" to="/" >Close</Link>
-                        <div className="search-books-input-wrapper">
-                            <input type="text" placeholder="Search by title or author"
-                             onChange={(event) => onSearch(event.target.value)} />
+    static propTypes = {
+        fetch: PropTypes.func.isRequired       
+    }
+
+    SearchUpdateShelf = (book, shelf) => {
+        BooksAPI
+            .update(book, shelf)
+            .then(() => {
+                this.props.fetch()
+                this.BookSearch(this.state.query)
+            })
+    }
+
+    BookSearch = (query, maxResult) => {
+        if (query !== '') {
+            BooksAPI
+                .search(query, maxResult)
+                .then(
+                    this.setState({query: query.trim()}),
+                                   
+                )   
+                .then((sbooks) => {
+                    if (sbooks !== 'undefined') {
+                        this.setState({sbooks})
+                    }
+                })          
+        }
+    }
+
+    FindBook  = (value) => {
+        let abook = this.state.sbooks.filter(x => x.id === value.id)       
+        return abook.length > 0
+    }
+
+    FindBookNot  = (value, arr) => {
+        let bbook = arr.filter(x => x.id === value.id)       
+        return bbook.length === 0
+    }
+    
+
+ render() {           
+        const{query, sbooks} = this.state
+        let showingBooks 
+        let filterBooks
+        let filterSearchBooks
+        if(sbooks.length !== 0)
+        {
+            filterBooks = this.props.books.filter(this.FindBook)
+            filterSearchBooks = sbooks.filter((x) => this.FindBookNot(x, filterBooks))            
+            showingBooks = filterBooks.concat(filterSearchBooks)     
+        }else{
+            showingBooks = []
+        }
+
+            return (
+                <div>
+                    <div className="search-books">
+                        <div className="search-books-bar">
+                            <Link className="close-search" to="/">Close</Link>
+                            <div className="search-books-input-wrapper">
+                                <input
+                                    type="text"
+                                    placeholder="Search by title or author"
+                                    value={query}
+                                    onChange={(event) => this.BookSearch(event.target.value)}/>
+                            </div>
+                        </div>
+                        <div className="search-books-results">
+                            <ol className="books-grid">
+                                {showingBooks.map((book) => (
+                                <SingleBook
+                                    key={book.id}
+                                    book={book}
+                                    onBookUpdate={this.SearchUpdateShelf} />
+                                ))
+                                }
+                            </ol>
                         </div>
                     </div>
-                    <div className="search-books-results">
-                        <ol className="books-grid">
-                        {this._checkLength(sbooks, onBookUpdate)}
-                        </ol>
-                    </div>
                 </div>
-            </div>
-        )
-    }
-    _checkLength(ListBook, onBookUpdate){
-        if(ListBook != null && ListBook.length > 1){
-            return(  
-                ListBook.map((book) => 
-                (
-                 this._getBooks(book,onBookUpdate)
-               ))
-            )
-        } else {
-            return(
-                <li>No book found!</li>
             )
         }
-          
-    }
-    _getBooks(book, onBookUpdate){
-     return (
-      
-        <li key={book.id}>
-        <div className="book">
-        <div className="book-top">
-        <div
-            className="book-cover"
-            style={{
-            width: 128,
-            height: 193,
-            backgroundImage: `url(${book.imageLinks ? book.imageLinks.thumbnail : ''})`
-           }}></div>
-          <div className="book-shelf-changer">
-           <select
-           value={book.shelf}
-           onChange={(event) => onBookUpdate(book, event.target.value)}>
-           <option value="none" disabled>Move to...</option>
-           <option value="currentlyReading">Currently Reading</option>
-           <option value="wantToRead">Want to Read</option>
-           <option value="read">Read</option>
-           <option value="none">None</option>
-           </select>
-          </div>
-         </div>
-          <div className="book-title">{book.title}</div>         
-         <div className="book-authors">{book.authors ? book.authors.join(', ') : ''}</div>
-         </div>
-        </li>
-    )
-  }
-}
 
-export default CreateSearch
+    }
+
+    export default CreateSearch
